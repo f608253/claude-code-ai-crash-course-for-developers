@@ -5,8 +5,27 @@ whenever you write, review, or modify any code or infrastructure in this project
 
 ## Repo Layout
 - `claude-code-in-terminal/` — a Vite + React (TypeScript) front-end app (the "course" web app).
+- `claude-code-tip-calculator/` — the featured Vite + React + TypeScript app (validated tip
+  calculator, Vitest + React Testing Library suite).
 - Root-level `.tf`, `.yml`, `k8s/`, `helm/`, etc. — infrastructure you generate in this repo.
 - `.claude/settings.json` — Claude Code harness config; do not edit unless asked.
+
+## Front-end app conventions
+- Two sibling Vite 8 + React 19 + TypeScript apps, built with strict TypeScript
+  (`verbatimModuleSyntax`, explicit `.ts`/`.tsx` import extensions):
+  - `claude-code-in-terminal/` — **minimal demo** (single `App.tsx`, no tests). Keep it
+    minimal; don't bolt on features.
+  - `claude-code-tip-calculator/` — **featured app**: validated whole-number inputs, arrow-key
+    stepping, folder-per-component components + `src/utils/`, and a Vitest suite. It is the
+    reference app for refactors, tests, and docs.
+- **Tests:** Vitest + React Testing Library, `.spec.{ts,tsx}` files co-located with whatever
+  they test. Run with `npm test` (`vitest run`) or `npm run test:watch`. Config lives in each
+  app's `vitest.config.ts` (jsdom, `globals: false`, threads pool — see the config comment
+  for the non-obvious pool choice).
+- **Quality gates before "done":** `npm run build` (`tsc -b && vite build`) and
+  `npm run lint` (`oxlint`); run `npm test` for the tip calculator.
+- **Docs:** keep a `DOCUMENTATION.md` in each app root (tip calculator's is the reference
+  format) covering overview, features, tech stack, structure, scripts, and how to test.
 
 ## Working principles
 - **Never mutate production.** Any apply/deploy/destructive command must be
